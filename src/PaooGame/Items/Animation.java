@@ -2,6 +2,9 @@ package PaooGame.Items;
 
 import java.awt.image.BufferedImage;
 
+/*! \class Animation
+    \brief Clasa pentru gestionarea animatiilor
+ */
 public class Animation {
     private int speed;
     private int index;
@@ -9,6 +12,9 @@ public class Animation {
     private long lastTime;
     private long timer;
 
+    /*! \fn Animation(int speed, BufferedImage[] frames)
+        \brief Constructorul clasei
+     */
     public Animation(int speed, BufferedImage[] frames) {
         this.speed = speed;
         this.frames = frames;
@@ -16,6 +22,8 @@ public class Animation {
         lastTime = System.currentTimeMillis();
     }
 
+    /*! \fn public void Update()
+     */
     public void Update() {
         timer += System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
@@ -29,6 +37,9 @@ public class Animation {
         }
     }
 
+    /*! \fn public BufferedImage getCurrentFrame()
+        \brief Getter pentru animatia curenta
+     */
     public BufferedImage getCurrentFrame() {
         return frames[index];
     }

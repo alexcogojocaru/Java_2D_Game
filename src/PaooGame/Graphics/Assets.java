@@ -11,20 +11,6 @@ import java.nio.BufferOverflowException;
 public class Assets
 {
         /// Referinte catre elementele grafice (dale) utilizate in joc.
-    public static BufferedImage heroLeft;
-    public static BufferedImage heroRight;
-    public static BufferedImage soil;
-    public static BufferedImage grass;
-    public static BufferedImage mountain;
-    public static BufferedImage townGrass;
-    public static BufferedImage townGrassDestroyed;
-    public static BufferedImage townSoil;
-    public static BufferedImage water;
-    public static BufferedImage rockUp;
-    public static BufferedImage rockDown;
-    public static BufferedImage rockLeft;
-    public static BufferedImage rockRight;
-    public static BufferedImage tree;
 
     public static BufferedImage blankTile;
     public static BufferedImage hero;
@@ -37,14 +23,9 @@ public class Assets
     public static BufferedImage heartHalf;
     public static BufferedImage heartEmpty;
     public static BufferedImage chestOpen;
-    public static BufferedImage chestHalfOpen;
-    public static BufferedImage chestClosed;
     public static BufferedImage bottomWall;
-    public static BufferedImage monster;
-    public static BufferedImage sword;
     public static BufferedImage downWall;
     public static BufferedImage skull;
-    public static BufferedImage potion;
 
     public static BufferedImage[] heroAnimation;
     public static BufferedImage[] zombieAnimation;
@@ -83,33 +64,10 @@ public class Assets
         hero = sheet.crop(8, 4, 16, 32);
         groundTile = sheet.crop(1, 4);
         crackedGroundTile = sheet.crop(2, 4);
-        rightWall = sheet.crop(0, 8);
-        leftWall = sheet.crop(1, 8);
-        downWall = sheet.crop(2, 8);
         wall = sheet.crop(1, 1);
         heartFull = sheet.crop(18, 16);
         heartHalf = sheet.crop(19, 16);
         heartEmpty = sheet.crop(20, 16);
-        chestOpen = sheet.crop(17, 14);
-        potion = sheet.crop(18, 14);
-        bottomWall = sheet.crop(2, 10);
-        monster = sheet.crop(23, 12, 16, 32);
         skull = sheet.crop(14, 14);
-
-        grass = sheet.crop(0, 0);
-        soil = sheet.crop(1, 0);
-        water = sheet.crop(2, 0);
-        mountain = sheet.crop(3, 0);
-        townGrass = sheet.crop(0, 1);
-        townGrassDestroyed = sheet.crop(1, 1);
-        townSoil = sheet.crop(2, 1);
-        tree = sheet.crop(3, 1);
-        heroLeft = sheet.crop(0, 2);
-        heroRight = sheet.crop(1, 2);
-        rockUp = sheet.crop(2, 2);
-        rockDown = sheet.crop(3, 2);
-        rockLeft = sheet.crop(0, 3);
-        rockRight = sheet.crop(1, 3);
-        sword = sheet.crop(20, 5, 16, 32);
     }
 }

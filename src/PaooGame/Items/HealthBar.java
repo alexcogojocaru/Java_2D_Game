@@ -5,12 +5,16 @@ import PaooGame.Graphics.Assets;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/*! \class HealthBar
+ */
 public class HealthBar {
     private static HealthBar healthBarInstance = null;
 
     private BufferedImage[] healthBar;
     private Hero hero;
 
+    /*! \fn HealthBar(Hero hero)
+     */
     private HealthBar(Hero hero) {
         this.hero = hero;
         healthBar = new BufferedImage[3];
@@ -20,6 +24,8 @@ public class HealthBar {
         healthBar[2] = Assets.heartFull;
     }
 
+    /*! \fn public static HealthBar getInstance(Hero hero)
+     */
     public static HealthBar getInstance(Hero hero) {
         if (healthBarInstance == null) {
             healthBarInstance = new HealthBar(hero);
@@ -27,6 +33,8 @@ public class HealthBar {
         return healthBarInstance;
     }
 
+    /*! \fn public void Update(boolean hit)
+     */
     public void Update(boolean hit) {
         if (hit) {
             hero.TakeDamage(1);
@@ -52,6 +60,8 @@ public class HealthBar {
             healthBar[0] = Assets.heartEmpty;
     }
 
+    /*! \fn public void Draw(Graphics g)
+     */
     public void Draw(Graphics g) {
         g.drawImage(healthBar[0], 0, 0, 32, 32, null);
         g.drawImage(healthBar[1], 32, 0, 32, 32,null);

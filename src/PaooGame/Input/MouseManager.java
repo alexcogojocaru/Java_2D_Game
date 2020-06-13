@@ -4,12 +4,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+/*! \class MouseManager
+    \brief Gestioneaza mouse input-ul
+ */
 public class MouseManager implements MouseListener, MouseMotionListener {
     private boolean leftPressed;
     private boolean rightPressed;
     private int mouseX;
     private int mouseY;
 
+    /*! \fn MouseManager()
+        \brief Constructorul clasei
+     */
     public MouseManager() {
 
     }

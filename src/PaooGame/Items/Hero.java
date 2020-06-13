@@ -1,9 +1,7 @@
 package PaooGame.Items;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
+import PaooGame.Maps.Map;
 import PaooGame.RefLinks;
 import PaooGame.Graphics.Assets;
 import PaooGame.States.PlayState;
@@ -50,10 +48,6 @@ public class Hero extends Character
         animation = new Animation(200, Assets.heroAnimation);
     }
 
-    public HealthBar getHealthBar() {
-        return healthBar;
-    }
-
     /*! \fn public void Update()
                     \brief Actualizeaza pozitia si imaginea eroului.
                  */
@@ -67,7 +61,7 @@ public class Hero extends Character
         skullBall.Update();
         Move();
 
-        for (Monster monster : PlayState.monsters) {
+        for (Monster monster : Map.monsters) {
             healthBar.Update(MonsterCollision(monster));
         }
 
@@ -78,14 +72,11 @@ public class Hero extends Character
                 break;
             }
         }
-
-//        for (Potion potion : PlayState.potions) {
-//            if (getCollisionBounds().intersects(potion.getCollisionBounds())) {
-//
-//            }
-//        }
     }
 
+    /*! \fn public boolean MonsterCollision(Monster monster)
+        \brief Testeaza coliziunea cu monster-ul
+     */
     public boolean MonsterCollision(Monster monster) {
         return getCollisionBounds().intersects(monster.getCollisionBounds());
     }
@@ -139,7 +130,7 @@ public class Hero extends Character
         healthBar.Draw(g);
         skullBall.Draw(g);
 
-        g.setColor(Color.RED);
-        g.drawRect((int)(normalBounds.x + x), (int)(normalBounds.y + y), normalBounds.width, normalBounds.height);
+//        g.setColor(Color.RED);
+//        g.drawRect((int)(normalBounds.x + x), (int)(normalBounds.y + y), normalBounds.width, normalBounds.height);
     }
 }

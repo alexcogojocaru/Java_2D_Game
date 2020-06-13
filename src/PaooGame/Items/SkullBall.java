@@ -6,6 +6,8 @@ import PaooGame.RefLinks;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/*! \class SkullBall
+ */
 public class SkullBall extends Item {
     private Hero hero;
     private BufferedImage image;
@@ -14,6 +16,8 @@ public class SkullBall extends Item {
 
     private final int RANGE = 500;
 
+    /*! \fn SkullBall(RefLinks refLink, Hero hero)
+     */
     public SkullBall(RefLinks refLink, Hero hero) {
         super(refLink, 0, 0, ITEM_WIDTH, ITEM_HEIGHT);
         this.hero = hero;
@@ -22,6 +26,8 @@ public class SkullBall extends Item {
         facingRight = true;
     }
 
+    /*! \fn public void Update()
+     */
     @Override
     public void Update() {
         if (refLink.GetMouseManager().isLeftPressed()) {
@@ -29,14 +35,12 @@ public class SkullBall extends Item {
             y = hero.GetY();
             rangedAttack = true;
 
-            if (refLink.GetMouseManager().getMouseX() < x) {
-                facingRight = false;
-            } else {
-                facingRight = true;
-            }
+            facingRight = !(refLink.GetMouseManager().getMouseX() < x);
         }
     }
 
+    /*! public void Draw(Graphics g)
+     */
     @Override
     public void Draw(Graphics g) {
         if (rangedAttack) {
@@ -46,10 +50,6 @@ public class SkullBall extends Item {
                 x += 3.0f;
             } else {
                 x -= 3.0f;
-            }
-
-            if (Math.abs(x) >= RANGE) {
-                rangedAttack = false;
             }
         }
     }

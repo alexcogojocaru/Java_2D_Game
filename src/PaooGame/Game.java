@@ -5,7 +5,6 @@ import PaooGame.Graphics.Assets;
 import PaooGame.Input.KeyManager;
 import PaooGame.Input.MouseManager;
 import PaooGame.States.*;
-import PaooGame.Tiles.Tile;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -45,6 +44,8 @@ import java.awt.image.BufferStrategy;
  */
 public class Game implements Runnable
 {
+    public static DatabaseManager databaseManager = new DatabaseManager("settings.db");
+
     private GameWindow      wnd;        /*!< Fereastra in care se va desena tabla jocului*/
     private boolean         runState;   /*!< Flag ce starea firului de executie.*/
     private Thread          gameThread; /*!< Referinta catre thread-ul de update si draw al ferestrei*/
@@ -64,15 +65,14 @@ public class Game implements Runnable
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
 
         ///Available states
-    private State playState;            /*!< Referinta catre joc.*/
-    private State menuState;            /*!< Referinta catre menu.*/
-    private State settingsState;        /*!< Referinta catre setari.*/
-    private State aboutState;           /*!< Referinta catre about.*/
+    public static PlayState playState;            /*!< Referinta catre joc.*/
+    public static State pauseState;        /*!< Referinta catre setari.*/
+    public static State menuState;            /*!< Referinta catre menu.*/
+    public static State deathState;           /*!< Referinta catre about.*/
+    public static State winState;
     private KeyManager keyManager;      /*!< Referinta catre obiectul care gestioneaza intrarile din partea utilizatorului.*/
     private MouseManager mouseManager;
-    private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibile.*/
-
-    private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
+    private RefLinks refLink;            /*!< Referinta catre un obiect a carui sarcina este doar de a retine diverse referinte pentru a fi usor accesibilepublic
 
     /*! \fn public Game(String title, int width, int height)
         \brief Constructor de initializare al clasei Game.
@@ -98,12 +98,12 @@ public class Game implements Runnable
     }
 
     /*! \fn private void init()
-        \brief  Metoda construieste fereastra jocului, initializeaza aseturile, listenerul de tastatura etc.
+            \brief  Metoda construieste fereastra jocului, initializeaza aseturile, listenerul de tastatura etc.
 
-        Fereastra jocului va fi construita prin apelul functiei BuildGameWindow();
-        Sunt construite elementele grafice (assets): dale, player, elemente active si pasive.
+            Fereastra jocului va fi construita prin apelul functiei BuildGameWindow();
+            Sunt construite elementele grafice (assets): dale, player, elemente active si pasive.
 
-     */
+         */
     private void InitGame()
     {
             /// Este construita fereastra grafica.
@@ -123,10 +123,11 @@ public class Game implements Runnable
             ///Definirea starilor programului
         playState       = new PlayState(refLink);
         menuState       = new MenuState(refLink);
-        settingsState   = new SettingsState(refLink);
-        aboutState      = new AboutState(refLink);
+        pauseState      = new PauseState(refLink);
+        deathState      = new DeathState(refLink);
+        winState        = new WinState(refLink);
             ///Seteaza starea implicita cu care va fi lansat programul in executie
-        State.SetState(playState);
+        State.SetState(menuState);
     }
 
     /*! \fn public void run()

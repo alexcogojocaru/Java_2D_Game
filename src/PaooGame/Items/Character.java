@@ -63,20 +63,20 @@ public abstract class Character extends Item
     {
             ///Aduna la pozitia curenta numarul de pixeli cu care trebuie sa se deplaseze pe axa X.
         if (xMove > 0) {
-            int tx = (int)(x + xMove + normalBounds.x + normalBounds.width) / Tile.TILE_WIDTH;
+        int tx = (int)(x + xMove + normalBounds.x + normalBounds.width) / Tile.TILE_WIDTH;
 
-            if (!collisionWithTile(tx, (int)(y + normalBounds.y) / Tile.TILE_HEIGHT) &&
-                    !collisionWithTile(tx, (int)(y + normalBounds.y + normalBounds.height) / Tile.TILE_HEIGHT)) {
-                x += xMove;
-            }
-        } else if (xMove < 0) {
-            int tx = (int)(x + xMove + normalBounds.x) / Tile.TILE_WIDTH;
-
-            if (!collisionWithTile(tx, (int)(y + normalBounds.y) / Tile.TILE_HEIGHT) &&
-                    !collisionWithTile(tx, (int)(y + normalBounds.y + normalBounds.height) / Tile.TILE_HEIGHT)) {
-                x += xMove;
-            }
+        if (!collisionWithTile(tx, (int)(y + normalBounds.y) / Tile.TILE_HEIGHT) &&
+                !collisionWithTile(tx, (int)(y + normalBounds.y + normalBounds.height) / Tile.TILE_HEIGHT)) {
+            x += xMove;
         }
+    } else if (xMove < 0) {
+        int tx = (int)(x + xMove + normalBounds.x) / Tile.TILE_WIDTH;
+
+        if (!collisionWithTile(tx, (int)(y + normalBounds.y) / Tile.TILE_HEIGHT) &&
+                !collisionWithTile(tx, (int)(y + normalBounds.y + normalBounds.height) / Tile.TILE_HEIGHT)) {
+            x += xMove;
+        }
+    }
     }
 
     /*! \fn public void MoveY()

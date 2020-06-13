@@ -1,46 +1,82 @@
 package PaooGame.Maps;
 
+import PaooGame.Items.AI;
+import PaooGame.Items.Hero;
+import PaooGame.Items.Monster;
 import PaooGame.RefLinks;
 import PaooGame.Tiles.Tile;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /*! \class public class Map
     \brief Implementeaza notiunea de harta a jocului.
  */
-public class Map
+public abstract class Map
 {
     private RefLinks refLink;   /*!< O referinte catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.*/
     private int width;          /*!< Latimea hartii in numar de dale.*/
     private int height;         /*!< Inaltimea hartii in numar de dale.*/
     private int [][] tiles;     /*!< Referinta catre o matrice cu codurile dalelor ce vor construi harta.*/
 
+    protected boolean isFinished;
+    protected int level;
+    protected int numberOfEnemies;
+    protected AI ai;
+
+    public static ArrayList<Monster> monsters;
+
     /*! \fn public Map(RefLinks refLink)
         \brief Constructorul de initializare al clasei.
 
         \param refLink O referinte catre un obiect "shortcut", obiect ce contine o serie de referinte utile in program.
      */
-    public Map(RefLinks refLink)
+    public Map(RefLinks refLink, Hero hero)
     {
             /// Retine referinta "shortcut".
         this.refLink = refLink;
             ///incarca harta de start. Functia poate primi ca argument id-ul hartii ce poate fi incarcat.
         LoadWorld();
+        monsters = null;
+        ai = null;
+        numberOfEnemies = 0;
+        level = 0;
+        isFinished = false;
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     /*! \fn public  void Update()
-        \brief Actualizarea hartii in functie de evenimente (un copac a fost taiat)
-     */
-    public  void Update()
+                \brief Actualizarea hartii in functie de evenimente (un copac a fost taiat)
+             */
+    public void Update()
     {
+        for (Monster monster : monsters) {
+            monster.Update();
 
+            if (monster.isAlive()) {
+                numberOfEnemies--;
+            }
+        }
+
+        if (numberOfEnemies == 0 && level == 1) {
+            level = 2;
+        }
+
+        if (numberOfEnemies == 0 && level == 3) {
+            level = 4;
+        }
+
+        ai.MoveToHero();
     }
 
     /*! \fn public void Draw(Graphics g)
-        \brief Functia de desenare a hartii.
+            \brief Functia de desenare a hartii.
 
-        \param g Contextul grafic in care se realizeaza desenarea.
-     */
+            \param g Contextul grafic in care se realizeaza desenarea.
+         */
     public void Draw(Graphics g)
     {
             ///Se parcurge matricea de dale (codurile aferente) si se deseneaza harta respectiva
@@ -50,6 +86,10 @@ public class Map
             {
                 GetTile(x, y).Draw(g, (int)x * Tile.TILE_HEIGHT, (int)y * Tile.TILE_WIDTH);
             }
+        }
+
+        for (Monster monster : monsters) {
+            monster.Draw(g);
         }
     }
 
@@ -92,7 +132,7 @@ public class Map
         {
             for(int x = 0; x < width; x++)
             {
-                tiles[x][y] = MiddleEastMap(y, x);
+                tiles[x][y] = GenerateMap(y, x);
             }
         }
     }
@@ -103,22 +143,5 @@ public class Map
         \param x linia pe care se afla codul dalei de interes.
         \param y coloana pe care se afla codul dalei de interes.
      */
-    private int MiddleEastMap(int x ,int y)
-    {
-            ///Definire statica a matricei de coduri de dale.
-        final int map[][] = {
-                {10, 10, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 10, 10, 10},
-                {10, 10, 3, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 10, 10, 10},
-                {10, 10, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 2, 10, 10, 10}
-        };
-
-        return map[x][y];
-    }
+    protected abstract int GenerateMap(int x , int y);
 }

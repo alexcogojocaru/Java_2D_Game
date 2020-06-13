@@ -1,7 +1,9 @@
 package PaooGame.States;
 
-import PaooGame.Graphics.Assets;
+import PaooGame.DatabaseManager;
+import PaooGame.Game;
 import PaooGame.Items.*;
+import PaooGame.Maps.MapFactory;
 import PaooGame.RefLinks;
 import PaooGame.Maps.Map;
 
@@ -13,13 +15,19 @@ import java.util.ArrayList;
  */
 public class PlayState extends State
 {
+    public static boolean isLoaded = false;
+    public static int x = 0;
+    public static int y = 0;
+    public static int level = 1;
+
     private Hero hero;  /*!< Referinta catre obiectul animat erou (controlat de utilizator).*/
-    private Map map;    /*!< Referinta catre harta curenta.*/
+    private MapFactory mapFactory;    /*!< Referinta catre harta curenta.*/
+    private Map map;
 
     public static ArrayList<Monster> monsters;
     public static ArrayList<Coin> coins;
-    public static ArrayList<Potion> potions;
-    private AI ai;
+
+    private boolean firstLevel;
 
     /*! \fn public PlayState(RefLinks refLink)
         \brief Constructorul de initializare al clasei
@@ -31,25 +39,25 @@ public class PlayState extends State
             ///Apel al constructorului clasei de baza
         super(refLink);
             ///Construieste harta jocului
-        map = new Map(refLink);
-            ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
-        refLink.SetMap(map);
             ///Construieste eroul
-        hero = new Hero(refLink,300, 100);
+        if (isLoaded) {
+            hero = new Hero(refLink, x, y);
+        } else {
+            hero = new Hero(refLink,300, 100);
+        }
+
         monsters = new ArrayList<>();
+
         coins = new ArrayList<>();
-        potions = new ArrayList<>();
-
         coins.add(new Coin(refLink, 200, 200));
-        coins.add(new Coin(refLink, 250, 200));
+        coins.add(new Coin(refLink, 600, 400));
 
-        monsters.add(new Monster(refLink, 150, 100));
-        monsters.add(new Monster(refLink, 600, 100));
-        monsters.add(new Monster(refLink, 600, 300));
+        mapFactory = new MapFactory(refLink);
+        map = mapFactory.getMap(level, hero);
+        ///Referinta catre harta construita este setata si in obiectul shortcut pentru a fi accesibila si in alte clase ale programului.
+        refLink.SetMap(map);
 
-        potions.add(new Potion(refLink, 100, 100));
-
-        ai = new AI(hero, monsters);
+        firstLevel = true;
     }
 
     /*! \fn public void Update()
@@ -60,35 +68,48 @@ public class PlayState extends State
     {
         map.Update();
         hero.Update();
-        for (Monster monster : monsters) {
-            monster.Update();
-//            hero.setMonster(monster);
-        }
-//        hero.setCoins(coins);
-        ai.MoveToHero();
 
         for (Coin coin : coins) {
             coin.Update();
         }
 
-        for (Potion potion : potions) {
-            potion.Update();
+        if (hero.GetLife() <= 0) {
+            State.SetState(Game.deathState);
+        }
+
+        if (refLink.GetKeyManager().escape) {
+            State.SetState(Game.pauseState);
+        }
+
+        if (map.getLevel() == 2 && firstLevel) {
+            map = mapFactory.getMap(2, hero);
+            firstLevel = false;
+            refLink.SetMap(map);
+        }
+
+        if (map.getLevel() == 4) {
+            State.SetState(Game.winState);
         }
     }
 
-    /*! \fn public void Draw(Graphics g)
-        \brief Deseneaza (randeaza) pe ecran starea curenta a jocului.
+    public boolean isFirstLevel() {
+        return firstLevel;
+    }
 
-        \param g Contextul grafic in care trebuie sa deseneze starea jocului pe ecran.
-     */
+    public Hero getHero() {
+        return hero;
+    }
+
+    /*! \fn public void Draw(Graphics g)
+            \brief Deseneaza (randeaza) pe ecran starea curenta a jocului.
+
+            \param g Contextul grafic in care trebuie sa deseneze starea jocului pe ecran.
+         */
     @Override
     public void Draw(Graphics g)
     {
         map.Draw(g);
         hero.Draw(g);
-        for (Monster monster : monsters) {
-            monster.Draw(g);
-        }
 
         for (Coin coin : coins) {
             coin.Draw(g);
@@ -97,13 +118,5 @@ public class PlayState extends State
         g.setColor(Color.WHITE);
         g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
         g.drawString("Score: " + Hero.points, 0, 50);
-
-//        for (Potion potion : potions) {
-//            potion.Draw(g);
-//        }
-
-//        g.setColor(Color.RED);
-//        g.fillRect(refLink.GetMouseManager().getMouseX(), refLink.GetMouseManager().getMouseY(), 8, 8);
-//        g.drawImage(Assets.potion, 40, 40, 32, 32,null);
     }
 }

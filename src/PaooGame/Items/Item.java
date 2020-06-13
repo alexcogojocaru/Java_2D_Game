@@ -51,12 +51,10 @@ public abstract class Item
         ///Metoda abstracta destinata desenarii starii curente
     public abstract void Draw(Graphics g);
 
+    /*! \fn public Rectangle getCollisionBounds()
+     */
     public Rectangle getCollisionBounds() {
         return new Rectangle((int)(normalBounds.x + x), (int)(normalBounds.y + y), normalBounds.width, normalBounds.height);
-    }
-
-    public Rectangle getNormalBounds() {
-        return normalBounds;
     }
 
     /*! \fn public float GetX()

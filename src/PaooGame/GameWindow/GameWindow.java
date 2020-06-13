@@ -39,11 +39,11 @@ public class GameWindow
     }
 
     /*! \fn private void BuildGameWindow()
-        \brief Construieste/creaza fereastra si seteaza toate proprietatile
-        necesare: dimensiuni, pozitionare in centrul ecranului, operatia de
-        inchidere, invalideaza redimensionarea ferestrei, afiseaza fereastra.
+            \brief Construieste/creaza fereastra si seteaza toate proprietatile
+            necesare: dimensiuni, pozitionare in centrul ecranului, operatia de
+            inchidere, invalideaza redimensionarea ferestrei, afiseaza fereastra.
 
-     */
+         */
     public void BuildGameWindow()
     {
             /// Daca fereastra a mai fost construita intr-un apel anterior
